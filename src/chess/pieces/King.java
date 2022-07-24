@@ -21,45 +21,21 @@ public class King extends ChessPiece {
 
         Position p = new Position(0, 0);
         //Above
-        p.setValues(position.getRow() - 1, position.getColumn());
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, -1, 0);
         //Below
-        p.setValues(position.getRow() + 1, position.getColumn());
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, 1, 0);
         //Left
-        p.setValues(position.getRow(), position.getColumn() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, 0, -1);
         //Right
-        p.setValues(position.getRow(), position.getColumn() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, 0, 1);
         //NW
-        p.setValues(position.getRow() - 1, position.getColumn() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, -1, -1);
         //NE
-        p.setValues(position.getRow() -1, position.getColumn() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, -1, 1);
         //SW
-        p.setValues(position.getRow() + 1, position.getColumn() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, 1, -1);
         //SE
-        p.setValues(position.getRow() + 1, position.getColumn() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            matrix[p.getRow()][p.getColumn()] = true;
-        }
+        checkValidMove(matrix, p, 1, 1);
 
         return matrix;
     }
@@ -67,5 +43,12 @@ public class King extends ChessPiece {
     private boolean canMove(Position position) {
         ChessPiece p = (ChessPiece)getBoard().piece(position);
         return (p == null || p.getColor() != getColor());
+    }
+
+    private void checkValidMove(boolean[][] matrix, Position p, int incrementRow, int incrementColumn) {
+        p.setValues(position.getRow() + incrementRow, position.getColumn() + incrementColumn);
+        if (getBoard().positionExists(p) && canMove(p)) {
+            matrix[p.getRow()][p.getColumn()] = true;
+        }
     }
 }
