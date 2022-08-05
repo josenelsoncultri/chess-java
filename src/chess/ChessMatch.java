@@ -17,6 +17,7 @@ public class ChessMatch {
     private List<Piece> piecesOnTheBoard = new ArrayList<>();
     private List<Piece> capturedPieces = new ArrayList<>();
     private boolean check;
+    private boolean checkmate;
 
     public ChessMatch() {
         board = new Board(8, 8);
@@ -49,6 +50,10 @@ public class ChessMatch {
         return check;
     }
 
+    public boolean getCheckmate() {
+        return checkmate;
+    }
+
     public boolean[][] possibleMoves(ChessPosition sourcePosition) {
         Position position = sourcePosition.toPosition();
         validateSourcePosition(position);
@@ -69,8 +74,11 @@ public class ChessMatch {
         }
 
         check = testCheck(opponent(currentPlayer));
-
-        nextTurn();
+        if (testCheckmate(opponent(currentPlayer))) {
+            checkmate = true;
+        } else {
+            nextTurn();
+        }
 
         return (ChessPiece)capturedPiece;
     }
@@ -167,5 +175,33 @@ public class ChessMatch {
             }
         }
         return false;
+    }
+
+    private boolean testCheckmate(Color color) {
+        if (!testCheck(color)) {
+            return false;
+        }
+
+        List<Piece> list = piecesOnTheBoard.stream().filter(
+                x -> ((ChessPiece) x).getColor() == color).toList();
+        for (Piece p : list) {
+            boolean[][] matrixPossibleMoves = p.possibleMoves();
+            for (int i = 0; i < board.getRows(); i++) {
+                for (int j = 0; j < board.getColumns(); j++) {
+                    if (matrixPossibleMoves[i][j]) {
+                        Position source = ((ChessPiece)p).getChessPosition().toPosition();
+                        Position target = new Position(i, j);
+                        Piece capturedPiece = makeMove(source, target);
+                        boolean testCheck = testCheck(color);
+                        undoMove(source, target, capturedPiece);
+                        if (!testCheck) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }
