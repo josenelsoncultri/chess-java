@@ -1,9 +1,6 @@
 package application;
 
-import chess.ChessException;
-import chess.ChessMatch;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import chessconsole.UI;
 
 import java.util.ArrayList;
@@ -41,7 +38,13 @@ public class Program {
 
                 if (chessMatch.getPromoted() != null) {
                     System.out.println("Enter piece for promotion (R/N/B/Q): ");
-                    String type = scanner.nextLine();
+                    String type = scanner.nextLine().toUpperCase();
+
+                    while (!Common.possiblePiecesToPromote.contains(type)) {
+                        System.out.println("Invalid value! Enter piece for promotion (R/N/B/Q): ");
+                        type = scanner.nextLine().toUpperCase();
+                    }
+
                     chessMatch.replacePromotedPiece(type);
                 }
             } catch (ChessException | InputMismatchException ex) {

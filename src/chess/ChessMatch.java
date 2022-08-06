@@ -5,9 +5,7 @@ import boardgame.Piece;
 import boardgame.Position;
 import chess.pieces.*;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ChessMatch {
@@ -20,7 +18,6 @@ public class ChessMatch {
     private boolean checkmate;
     private ChessPiece enPassantVulnerable;
     private ChessPiece promoted;
-    private final List<String> possiblePiecesToPromote = Arrays.asList("R", "N", "B", "Q");
 
     public ChessMatch() {
         board = new Board(8, 8);
@@ -336,8 +333,8 @@ public class ChessMatch {
             throw new IllegalStateException("There is no piece to be promoted");
         }
 
-        if (!possiblePiecesToPromote.contains(type)) {
-            throw new InvalidParameterException("Invalid type for promotion");
+        if (!Common.possiblePiecesToPromote.contains(type)) {
+            return promoted;
         }
 
         Position pos = promoted.getChessPosition().toPosition();
