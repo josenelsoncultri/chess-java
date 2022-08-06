@@ -40,7 +40,7 @@ public class UI {
 
     public static ChessPosition readChessPosition(Scanner scanner) {
         try {
-            String s = scanner.nextLine();
+            String s = scanner.nextLine().toLowerCase();
             char column = s.charAt(0);
             int row = Integer.parseInt(s.substring(1));
 
